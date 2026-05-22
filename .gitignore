@@ -3,5 +3,6 @@
 
 frontend/.angular
 frontend/node_modules
+**/dist
 **/target
 
