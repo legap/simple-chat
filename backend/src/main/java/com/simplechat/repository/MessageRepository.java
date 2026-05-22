@@ -14,6 +14,6 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     @Query("SELECT m FROM Message m WHERE m.chat.id = :chatId ORDER BY m.sentAt DESC")
     Page<Message> findByChatIdOrderBySentAtDesc(@Param("chatId") Long chatId, Pageable pageable);
 
-    @Query("SELECT m FROM Message m WHERE m.chat.id = :chatId ORDER BY m.sentAt DESC LIMIT 1")
-    Optional<Message> findLastMessageByChatId(@Param("chatId") Long chatId);
+    @Query("SELECT m FROM Message m WHERE m.chat.id = :chatId ORDER BY m.sentAt DESC")
+    Optional<Message> findLastMessageByChatId(@Param("chatId") Long chatId, org.springframework.data.domain.Pageable pageable);
 }

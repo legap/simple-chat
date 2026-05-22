@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.PageRequest;
+
 @Service
 @RequiredArgsConstructor
 public class ChatService {
@@ -26,7 +28,7 @@ public class ChatService {
         return chatRepository.findAll().stream()
                 .map(chat -> {
                     Long memberCount = chatMemberRepository.countByChatId(chat.getId());
-                    LastMessageDto lastMessage = messageRepository.findLastMessageByChatId(chat.getId())
+                    LastMessageDto lastMessage = messageRepository.findLastMessageByChatId(chat.getId(), PageRequest.of(0, 1))
                             .map(msg -> new LastMessageDto(
                                     msg.getContent().length() > 50
                                             ? msg.getContent().substring(0, 50)
