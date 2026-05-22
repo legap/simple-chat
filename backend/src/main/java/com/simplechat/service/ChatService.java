@@ -29,6 +29,9 @@ public class ChatService {
                 .map(chat -> {
                     Long memberCount = chatMemberRepository.countByChatId(chat.getId());
                     LastMessageDto lastMessage = messageRepository.findLastMessageByChatId(chat.getId(), PageRequest.of(0, 1))
+                            .getContent()
+                            .stream()
+                            .findFirst()
                             .map(msg -> new LastMessageDto(
                                     msg.getContent().length() > 50
                                             ? msg.getContent().substring(0, 50)
