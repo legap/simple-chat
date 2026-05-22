@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
 import { ChatService } from '../../services/chat.service';
+import { UserService } from '../../services/user.service';
 import { ChatListItem } from '../../models/chat.model';
 import { ChatListItemComponent } from '../../components/chat-list-item/chat-list-item.component';
 import { CreateChatDialogComponent } from '../../components/create-chat-dialog/create-chat-dialog.component';
@@ -27,7 +28,7 @@ import { MatDialog } from '@angular/material/dialog';
     <mat-toolbar color="primary">
       <span>SimpleChat</span>
       <span class="spacer"></span>
-      <span>{{ username }}</span>
+      <span>{{ (userService.currentUser$ | async)?.username }}</span>
     </mat-toolbar>
 
     <div class="container">
@@ -75,9 +76,9 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class ChatListComponent implements OnInit {
   private chatService = inject(ChatService);
+  userService = inject(UserService);
   private dialog = inject(MatDialog);
 
-  username = 'User'; // TODO: get from AuthService
   chats: ChatListItem[] = [];
 
   ngOnInit(): void {
@@ -98,7 +99,8 @@ export class ChatListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.chatService.createChat(result).subscribe({
+        const userId = this.userService.currentUser?.id;
+        this.chatService.createChat(result, userId).subscribe({
           next: (chat) => {
             this.loadChats();
           },

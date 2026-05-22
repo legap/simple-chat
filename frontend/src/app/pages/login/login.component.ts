@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -47,12 +48,14 @@ import { Router } from '@angular/router';
 export class LoginComponent {
   username = '';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private userService: UserService) {}
 
   login(): void {
     if (this.username.trim()) {
-      // TODO: integrate with AuthService
-      this.router.navigate(['/chats']);
+      this.userService.login(this.username).subscribe({
+        next: () => this.router.navigate(['/chats']),
+        error: (err) => console.error('Login failed', err)
+      });
     }
   }
 }

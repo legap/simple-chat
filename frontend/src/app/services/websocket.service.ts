@@ -1,6 +1,8 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Subject } from 'rxjs';
+import * as StompJs from '@stomp/stompjs';
+import SockJS from 'sockjs-client';
 
 export interface ConnectionStatus {
   connected: boolean;
@@ -24,9 +26,6 @@ export class WebSocketService implements OnDestroy {
 
   connect(onConnect: () => void, onError: (error: any) => void): void {
     const wsUrl = environment.wsUrl;
-
-    const StompJs = require('@stomp/stompjs');
-    const SockJS = require('sockjs-client');
 
     this.stompClient = StompJs.Stomp.over(new SockJS(wsUrl));
 
