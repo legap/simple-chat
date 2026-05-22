@@ -1,0 +1,23 @@
+schema: spec-driven
+
+# Project context
+context: |
+  Tech stack:
+    Frontend: Angular 22+ (standalone components), Angular Material, STOMP.js, sockjs-client, TypeScript 5.5+
+    Backend: Java 25 LTS, SpringBoot 4.0+, Spring Framework 7.x, Spring WebSocket with STOMP, Spring Data JPA, PostgreSQL
+    Auth: Simple username-based (no passwords)
+
+  Database: PostgreSQL with tables for users, chats, chat_members, messages
+
+  API: REST endpoints for users and chats; WebSocket STOMP endpoints for real-time messaging
+
+  Domain: Simple group chat application where users pick a username, create/join group chats, and exchange messages in real-time
+
+# Per-artifact rules
+rules:
+  proposal:
+    - Keep proposals concise and focused
+    - Always include verification steps
+  tasks:
+    - Break tasks into chunks of max 2 hours
+    - Group related backend/frontend changes together
