@@ -1,5 +1,7 @@
 .claude
 .idea
 
+frontend/.angular
+frontend/node_modules
 **/target
 
