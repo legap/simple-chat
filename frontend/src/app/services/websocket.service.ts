@@ -23,6 +23,7 @@ export class WebSocketService implements OnDestroy {
 
   private connectionStatusSubject = new Subject<ConnectionStatus>();
   public connectionStatus$ = this.connectionStatusSubject.asObservable();
+  private activeSubscriptions = new Map<string, any>();
 
   connect(onConnect: () => void, onError: (error: any) => void): void {
     const wsUrl = environment.wsUrl;
@@ -82,9 +83,13 @@ export class WebSocketService implements OnDestroy {
 
   subscribe(destination: string, callback: (message: any) => void): void {
     if (this.stompClient && this.stompClient.connected) {
-      this.stompClient.subscribe(destination, (message: any) => {
+      if (this.activeSubscriptions.has(destination)) {
+        this.activeSubscriptions.get(destination).unsubscribe();
+      }
+      const subscription = this.stompClient.subscribe(destination, (message: any) => {
         callback(JSON.parse(message.body));
       });
+      this.activeSubscriptions.set(destination, subscription);
     }
   }
 
@@ -99,6 +104,7 @@ export class WebSocketService implements OnDestroy {
       clearTimeout(this.reconnectTimer);
       this.reconnectTimer = null;
     }
+    this.activeSubscriptions.clear();
     if (this.stompClient) {
       this.stompClient.deactivate();
       this.stompClient = null;
